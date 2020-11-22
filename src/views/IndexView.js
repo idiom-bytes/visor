@@ -2,9 +2,6 @@
 
 import React from 'react'
 import { createScope, map, transformProxies } from './helpers'
-import SelectedTokenView from './SelectedTokenView'
-import ToSelectTokenView from './ToSelectTokenView'
-import ConnectWalletView from './ConnectWalletView'
 
 const scripts = [
   fetch("https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=5fb9f3345977972da8646063").then(body => body.text()),
@@ -51,8 +48,11 @@ class IndexView extends React.Component {
   render() {
     const proxies = Controller !== IndexView ? transformProxies(this.props.children) : {
       'from-amount': [],
+      'from-icon': [],
+      'from-ticker': [],
       'inverse-order': [],
       'to-amount': [],
+      'connect-wallet': [],
     }
 
     return (
@@ -82,7 +82,9 @@ class IndexView extends React.Component {
                     <div className="af-class-text-block">From</div>
                     <div className="w-form">
                       <form id="email-form" name="email-form" data-name="Email Form" className="af-class-form">{map(proxies['from-amount'], props => <input type="text" maxLength={256} name="name" data-name="Name" placeholder={0.0} id="name" {...{...props, className: `af-class-text-field w-input ${props.className || ''}`}}>{props.children}</input>)}
-                        <SelectedTokenView.Controller />
+                        <div className="af-class-selectedtoken">{map(proxies['from-icon'], props => <img src="images/eth_icon_small.png" loading="lazy" alt {...{...props, className: `af-class-image-2 ${props.className || ''}`}}>{props.children}</img>)}
+                          {map(proxies['from-ticker'], props => <div {...{...props, className: `af-class-text-block-4 ${props.className || ''}`}}>{props.children ? props.children : <React.Fragment>ETH</React.Fragment>}</div>)}
+                        </div>
                       </form>
                       <div className="w-form-done">
                         <div>Thank you! Your submission has been received!</div>
@@ -99,7 +101,9 @@ class IndexView extends React.Component {
                     <div className="af-class-text-block">To</div>
                     <div className="w-form">
                       <form id="email-form" name="email-form" data-name="Email Form" className="af-class-form">{map(proxies['to-amount'], props => <input type="text" maxLength={256} name="name-2" data-name="Name 2" placeholder={0.0} id="name-2" {...{...props, className: `af-class-text-field w-input ${props.className || ''}`}}>{props.children}</input>)}
-                        <ToSelectTokenView.Controller />
+                        <div className="af-class-selecttoken">
+                          <div className="af-class-selecttokentext">Select A Token</div>
+                        </div>
                       </form>
                       <div className="w-form-done">
                         <div>Thank you! Your submission has been received!</div>
@@ -110,7 +114,13 @@ class IndexView extends React.Component {
                     </div>
                   </div>
                 </div>
-                <ConnectWalletView.Controller />
+                <div className="af-class-div-block-7">
+                  <div className="af-class-div-block-4">
+                    <div className="af-class-text-block-2">Calculated Slippage</div>
+                    <div className="af-class-text-block-3">2%</div>
+                  </div>
+                  {map(proxies['connect-wallet'], props => <a href="#" {...{...props, className: `af-class-button w-button ${props.className || ''}`}}>{props.children ? props.children : <React.Fragment>Connect&nbsp;Wallet</React.Fragment>}</a>)}
+                </div>
               </div>
             </div>
             {/* [if lte IE 9]><![endif] */}
